@@ -5,6 +5,8 @@ const Busboy = require("busboy");
 const basePath = path.join(__dirname, "buckets");
 
 const controller = {
+ 
+  // Get api for listing buckets
   listBuckets: async (req, res) => {
     try {
       const uploadsPath = path.join(basePath);
@@ -18,6 +20,7 @@ const controller = {
     }
   },
 
+  // Get api for listing files by bucket name
   listObjects: async (req, res) => {
     try {
       const { bucketName } = req.params;
@@ -33,6 +36,7 @@ const controller = {
     }
   },
 
+  // Post api for uploading files to bucket
   postObject: async (req, res) => {
     const busboy = Busboy({ headers: req.headers });
 
@@ -43,6 +47,7 @@ const controller = {
         bucketName,
         filename.filename
       );
+      //Check if folder exists if not create one
       if (!fs.existsSync(path.dirname(saveTo))) {
         fs.mkdirSync(path.dirname(saveTo), { recursive: true });
       }
@@ -55,6 +60,7 @@ const controller = {
     req.pipe(busboy);
   },
 
+  // Get api for retrieving files by name
   getObject: async (req, res) => {
     try {
       const { bucketName, objectName } = req.params;
@@ -69,6 +75,7 @@ const controller = {
     }
   },
 
+  // Delete api for deleting files
   deleteObject: async (req, res) => {
     try {
       const { bucketName, objectName } = req.params;
